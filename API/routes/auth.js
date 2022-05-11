@@ -11,6 +11,7 @@ router.post("/register", async (req, res) => {
         password: CryptoJS.AES.encrypt(
             req.body.password, process.env.PASS_SEC
         ).toString(),
+        refreshToken: req.body?.refreshToken,
     });
 
     try {
@@ -51,12 +52,45 @@ router.post("/login", async (req, res) => {
             ...others
         } = user._doc;
 
+        // user.refreshToken = accessToken;
+        // const result = await user.save();
+        // console.log(result);
+
+        // res.cookie('jwt', accessToken);
         res.status(200).json({...others, accessToken});
+       
     } catch (err) {
         res.status(501).json(err);
     }
 })
 
+//LOGOUT
+// router.post("/logout", async (req, res) => {
+    
+//    try {
+//     const cookies = req.cookies;
+//     if(!cookies?.jwt) return res.status(200);
+//     const refreshToken = cookies.jwt;
+
+//     // Is refreshToken in db?
+//     const user = await User.findOne({ refreshToken }).exec();
+//     if (!user) {
+//         res.clearCookie('jwt');
+//         return res.status(200).json('Cookies were deleted!')
+//     }
+
+//     // Delete refreshToken in db
+//     user.refreshToken = '';
+//     const result = await user.save();
+//     console.log(result);
+
+//     res.clearCookie('jwt');
+//     res.status(200).json('Cookies were deleted!')
+//    } catch (err) {
+//     res.status(404).json('Oops!')
+//    }
+
+// });
 
 
 module.exports = router;

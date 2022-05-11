@@ -33,16 +33,19 @@ export const categories = [
         id: 1,
         img: "https://images.pexels.com/photos/8400604/pexels-photo-8400604.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
         title: "MESAS",
+        cat: "mesas-ratonas"
     },
     {
         id: 2,
         img: "https://images.pexels.com/photos/1173648/pexels-photo-1173648.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-        title: "ESTANTERIAS",
+        title: "BIBLIOTECAS",
+        cat: "bibliotecas"
     },
     {
         id: 3,
         img: "https://images.pexels.com/photos/5705490/pexels-photo-5705490.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-        title: "ROPEROS",
+        title: "ESCRITORIOS",
+        cat: "escritorios"
     },
 ]
 
