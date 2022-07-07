@@ -257,9 +257,9 @@ const handleEdit = (e) => {
     confirmButtonText: "Actualizar",
   }).then((result) => {
     if (result.isConfirmed) {
-      if (file.value !== imgSubida){
-         imgSubida = uploadImage();
-      }
+      // if (file.value !== imgSubida){
+      //    imgSubida = uploadImage();
+      // }
       Swal.fire({
         position: "mid",
         icon: "success",
@@ -269,7 +269,7 @@ const handleEdit = (e) => {
       });
       const product = {
         ...inputs,
-        img: imgSubida ? imgSubida : file.value,
+        // img: imgSubida ? imgSubida : file.value,
       };
       updateProduct(productId, product, dispatch);
       navigate("/admin/products");
