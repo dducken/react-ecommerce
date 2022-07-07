@@ -9,8 +9,6 @@ import styled from "styled-components";
 import { mobile } from "../../responsive";
 import Swal from "sweetalert2";
 import {CSVLink} from "react-csv";
-import ReactHTMLTableToExcel from 'react-html-table-to-excel';
-import SearchUser from "../search/SearchUser";
 import SearchIcon from "@material-ui/icons/Search";
 import CloseIcon from "@material-ui/icons/Close";
 
@@ -66,10 +64,18 @@ const Input = styled.input`
   
   width: 100px;
   margin: 0 30px 0 30px;
-  padding: 10px;
-  font-size: 13px;
+  padding: 5px;
+  font-size: 14px;
 
 `;
+const Input2 = styled.input`
+  
+padding: 5px;
+ 
+  font-size: 14px;
+
+`;
+ 
 const Select = styled.select`
   width: 110px;
   margin: 0 30px 0 30px;
@@ -260,9 +266,8 @@ const csvReport = {
         {/* <SearchUser placeholder="Buscar" data={clients} onChange={handleChange}/> */}
         <div className="search">
       <div className="searchInputs">
-        <input
+        <Input2
           type="text"
-          name="email"
           placeholder="Buscar"
           value={wordEntered !== '' ? wordEntered : Email}
           onChange={handleSearch}

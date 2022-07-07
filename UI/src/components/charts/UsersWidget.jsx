@@ -2,18 +2,24 @@ import "./usersWidget.css";
 import { ArrowDownward, ArrowUpward } from "@material-ui/icons";
 import { useEffect, useState } from "react";
 import { publicRequest, userRequest } from "../../requestMethods";
+import Swal from "sweetalert2";
 
 export default function UsersWidget() {
   const [income, setIncome] = useState([]);
   const [perc, setPerc] = useState(0);
   const [actualIncome, setActualIncome] = useState([]);
   const [prevIncome, setPrevIncome] = useState([]);
+  const [incomeByDate, setincomeByDate] = useState([]);
+
+
+
 
   const [orders, setOrders] = useState([]);
   const [LastMonthOrders, setLastMonthOrders] = useState([]);
   const [users, setUsers] = useState([]);
   const [LastMonthUsers, setLastMonthUsers] = useState([]);
-
+ const [values, setValues] = useState({});
+ const [numberOfMonth, setNumberOfMonth] = useState([]);
 
   // Ingresos
   // useEffect(() => {
@@ -39,13 +45,54 @@ export default function UsersWidget() {
   
           setActualIncome(mesActual.data.income);
           setPrevIncome(mesPasado.data.income);
-
-       
-
+          setNumberOfMonth(mesActual.data.income[0]._id);
+          
         } catch {}
       };
       getIncome();
     }, []);
+    
+ 
+    const onChange = (e) => {
+      // setValues({ ...values, [e.target.name]: e.target.value });
+      getIncomeByMonth(e);
+    };
+
+      // Ingresos version seleccionar mes
+     
+        const getIncomeByMonth = async (e) => {
+          try {
+           
+       
+              const mesActual = await publicRequest.get(`orders/actual/income/bydate?mes=${e}`);
+              
+              if(mesActual.data.income[0].total > 0){
+                console.log(mesActual.data.income[0].total);
+                setincomeByDate(mesActual.data.income[0].total / 100);
+
+              }
+
+             
+         
+             
+
+           
+      
+          } catch {
+            Swal.fire({
+              position: "top",
+              icon: "info",
+              title: "No hay datos para el mes seleccionado",
+              showConfirmButton: false,
+              timer: 2000,
+            });
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          }
+        };
+      
+     
   
 
   //Pedidos
@@ -79,6 +126,8 @@ export default function UsersWidget() {
     getUsers();
   }, []);
 
+ 
+
   return (
     <div className="featured">
       <div className="featuredItem">
@@ -95,12 +144,28 @@ export default function UsersWidget() {
           </span>
         </div> */}
            <div className="featuredMoneyContainer">
-          <span className="featuredMoney">${actualIncome[0]?.total / 100}</span>
+          <span className="featuredMoney">${incomeByDate > 0 ? incomeByDate : actualIncome[0]?.total / 100}</span>
           <span className="featuredMoneyRate">
               <ArrowUpward className="featuredIcon" />
           </span>
         </div>
-        <span className="featuredSub">Mes pasado ${prevIncome[0]?.total / 100}</span>
+        {/* <span className="featuredSub">Mes pasado ${prevIncome[0]?.total / 100}</span> */}
+        <span className="featuredSub">Mes </span>
+        <select className="featuredSub" name="mes" id="mes" defaultValue={actualIncome[0]?._id } onChange={(e)=>onChange(e.target.value)}>
+          <option value="0" selected disabled>Seleccionar</option>
+          <option value="1">Enero</option>
+          <option value="2">Feb</option>
+          <option value="3">Mar</option>
+          <option value="4">Abril</option>
+          <option value="5">Mayo</option>
+          <option value="6">Junio</option>
+          <option value="7">Julio</option>
+          <option value="8">Agosto</option>
+          <option value="9">Septiembre</option>
+          <option value="10">Octubre</option>
+          <option value="11">Noviembre</option>
+          <option value="12">Diciembre</option>
+        </select>
       </div>
       <div className="featuredItem">
         <span className="featuredTitle">Pedidos</span>

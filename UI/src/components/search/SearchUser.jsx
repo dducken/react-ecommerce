@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 function SearchInput({ placeholder, data }) {
   const [filteredData, setFilteredData] = useState([]);
   const [wordEntered, setWordEntered] = useState("");
-  const [email, setEmail] = useState([]);
+  const [userEmail, setEmail] = useState([]);
 
 
   const handleFilter = (event) => {
@@ -41,13 +41,12 @@ function SearchInput({ placeholder, data }) {
       <div className="searchInputs">
         <input
           type="text"
-          name="email"
           placeholder={placeholder}
-          value={email ? email : wordEntered}
+          value={userEmail ? userEmail : wordEntered}
           onChange={handleFilter}
         />
         <div className="searchIcon">
-          {filteredData.length === 0  && email ===''? (
+          {filteredData.length === 0  && userEmail ===''? (
             <SearchIcon />
           ) : (
             <CloseIcon id="clearBtn" onClick={clearInput} />
