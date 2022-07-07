@@ -4,6 +4,8 @@ import {
 } from "@reduxjs/toolkit"
 import cartReducer from "./cartRedux";
 import userReducer from "./UserRedux";
+import productReducer from "./productRedux";
+
 import {
     persistStore,
     persistReducer,
@@ -25,7 +27,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
     user: userReducer,
-    cart: cartReducer
+    cart: cartReducer,
+    product: productReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -34,6 +37,9 @@ export const store =
     configureStore({
         reducer: persistedReducer,
         middleware: (getDefaultMiddleware) =>
+        // getDefaultMiddleware({
+        //     serializableCheck: false,
+        //   }),
             getDefaultMiddleware({
                 serializableCheck: {
                     ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],

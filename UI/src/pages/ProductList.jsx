@@ -5,6 +5,7 @@ import Announcement from "../components/Announcement"
 import Footer from "../components/Footer"
 import Navbar from "../components/Navbar"
 import NavMenu from "../components/NavMenu"
+import PrevFooter from "../components/PrevFooter"
 import Products from "../components/Products"
 
 const Container = styled.div`
@@ -55,12 +56,12 @@ const ProductList = () => {
         <Announcement/>
         <Navbar/>
         <NavMenu/>
-        <Title>{cat}</Title>
+        <Title id="all">{cat}</Title>
         <FilterContainer>
             <Filter>
-                <FilterText>Filtrar por:</FilterText>
+                <FilterText>Color:</FilterText>
                 <Select name="color" onChange={handleFilters}>
-                    <Option disabled>Color</Option>
+                    <Option disabled>Seleccione</Option>
                     <Option value="white">blanco</Option>
                     <Option value="black">negro</Option>
                     <Option value="papayawhip">olmo</Option>
@@ -78,6 +79,7 @@ const ProductList = () => {
             </Filter>
         </FilterContainer>
         <Products cat={cat} filters={filters} sort={sort} />
+        <PrevFooter/>
         <Footer/>
     </Container>
   )

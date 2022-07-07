@@ -1,4 +1,5 @@
 import { Add, Remove } from "@material-ui/icons";
+import "./single/productColor.css";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -7,13 +8,19 @@ import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import NavMenu from "../components/NavMenu";
-import { addProduct } from "../redux/cartRedux";
+import { addProduct, addToCart } from "../redux/cartRedux";
 import { publicRequest } from "../requestMethods";
+import { mobile } from "../responsive";
+import Swal from "sweetalert2";
+import { Alert } from "@mui/material";
 
 const Container = styled.div``;
 const Wrapper = styled.div`
   padding: 50px;
   display: flex;
+
+  ${mobile({ flexDirection:"column", padding:"35px"})}
+
 `;
 const ImgContainer = styled.div`
   flex: 1;
@@ -22,6 +29,9 @@ const Image = styled.img`
   width: 100%;
   height: 90vh;
   object-fit: cover;
+
+  ${mobile({ height:"50vh"})}
+
 `;
 const InfoContainer = styled.div`
   flex: 1;
@@ -29,6 +39,9 @@ const InfoContainer = styled.div`
 `;
 const Title = styled.h1`
   font-weight: 200;
+
+  ${mobile({ marginTop:"20px"})}
+
 `;
 const Desc = styled.p`
   margin: 20px 0px;
@@ -59,12 +72,20 @@ const FilterColor = styled.div`
   border: 0.5px solid gray;
   margin: 0px 5px;
   cursor: pointer;
+
+  // &:hover {
+  //   border: 1px solid black;
+  // }
 `;
 const AddContainer = styled.div`
   width: 50%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  ${mobile({ width:"210px"})}
+  
+
 `;
 const AmountContainer = styled.div`
   display: flex;
@@ -91,6 +112,11 @@ const Button = styled.button`
   &:hover {
     background-color: #f8f4f4;
   }
+
+  ${mobile({ padding:"8px",fontSize:"12px"})}
+`;
+const AddRemoveBtn = styled.span`
+  cursor: pointer;
 `;
 
 const Product = () => {
@@ -99,8 +125,8 @@ const Product = () => {
   const [quantity, setQuantity] = useState(1);
   const [color, setColor] = useState("");
   const dispatch = useDispatch();
-
   const [product, setProduct] = useState({});
+  const [Active, setActive] = useState(false);
 
   useEffect(() => {
     const getProduct = async () => {
@@ -121,12 +147,41 @@ const Product = () => {
   };
 
 //   price:product.price*quantity multiplicador del precio segun la cantidad
-  const handleClick = () => {
-      //update cart
+  const handleClick = (product) => {
+  //Update cart
     dispatch(
       addProduct({ ...product, quantity, color })
     );
+    // dispatch(
+    //   addToCart({ ...product, quantity, color })
+    // );
+    
+    // dispatch(addToCart({...product, quantity, color}));
+    setActive(true);
+    setTimeout(function () {
+     setActive(false);
+    }, 1500);
+ 
   };
+
+  const COLOR_BTNS = document.querySelectorAll('.color');
+
+ COLOR_BTNS.forEach(color => {
+    color.addEventListener('click', () => {
+      if(!color.classList.contains('active-color')){
+        resetActiveColor();
+        color.classList.add('active-color');
+      }
+    });
+    
+  })
+
+  //Resetear color
+  const resetActiveColor = () => {
+    COLOR_BTNS.forEach(color => {
+      color.classList.remove('active-color')
+    })
+  }
 
   return (
     <Container>
@@ -145,18 +200,23 @@ const Product = () => {
             <Filter>
               <FilterTitle>Color</FilterTitle>
               {product.color?.map((c) => (
-                <FilterColor color={c} key={c} onClick={() => setColor(c)}/>
+                <div className="color">
+                  <FilterColor color={c} key={c} onClick={() => setColor(c)}/>
+                  </div>
               ))}
             </Filter>
           </FilterContainer>
           <AddContainer>
             <AmountContainer>
-              <Remove onClick={()=>handleQuantity("dec")}/>
+              <AddRemoveBtn><Remove onClick={()=>handleQuantity("dec")}/></AddRemoveBtn>
               <Amount>{quantity}</Amount>
-              <Add onClick={()=>handleQuantity("inc")}/>
+              <AddRemoveBtn><Add onClick={()=>handleQuantity("inc")}/></AddRemoveBtn>
             </AmountContainer>
-            <Button onClick={handleClick}>Agregar al carrito</Button>
+            <Button onClick={() => handleClick(product)}>Agregar al carrito</Button>
           </AddContainer>
+            {
+              Active && <Alert style={{marginTop: '10px'}} severity="success">Agregado al carrito </Alert>
+            }
         </InfoContainer>
       </Wrapper>
       <Footer />

@@ -3,22 +3,39 @@ const User = require("../models/User");
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
 
+// Handle Errors
+const handleErrors = (err) => {
+    console.log(err.message, err.code);
+    let errors = {password: ''};
+
+    // validation errors
+    if(err.message.includes('User validation failed')){
+        Object.values(err.errors).forEach(({properties}) => {
+            errors[properties.path] = properties.message;
+        });
+    }
+
+    return errors;
+}
+
+
 //REGISTER
 router.post("/register", async (req, res) => {
+    
     const newUser = new User({
         username: req.body.username,
         email: req.body.email,
         password: CryptoJS.AES.encrypt(
             req.body.password, process.env.PASS_SEC
-        ).toString(),
-        refreshToken: req.body?.refreshToken,
+        ).toString()
     });
 
     try {
         const savedUser = await newUser.save();
         res.status(200).json(savedUser);
     } catch (err) {
-        res.status(501).json(err);
+        const errors = handleErrors(err);
+        res.status(501).json({errors});
     }
 
 });
@@ -44,7 +61,7 @@ router.post("/login", async (req, res) => {
             id: user._id,
             isAdmin: user.isAdmin,
         }, process.env.JWT_SEC, 
-        { expiresIn: "1d"}
+        { expiresIn: "300d"}
         );
 
         const {

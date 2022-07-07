@@ -4,7 +4,7 @@ const { verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin } = requir
 const router = require("express").Router();
 
 //UPDATE
-router.put("/:id", verifyTokenAndAuthorization, async (req,res)=>{
+router.put("/:id", async (req,res)=>{
    if(req.body.password) {
        req.body.password = CryptoJS.AES.encrypt(
         req.body.password, 
@@ -35,7 +35,7 @@ router.delete("/:id", verifyTokenAndAuthorization, async (req,res)=>{
 });
 
 //GET USER BY ID
-router.get("/get/:id", verifyTokenAndAdmin, async (req,res)=>{
+router.get("/get/:id", async (req,res)=>{
     try {
         const user = await User.findById(req.params.id)
         const {
@@ -49,8 +49,8 @@ router.get("/get/:id", verifyTokenAndAdmin, async (req,res)=>{
     }
 });
 
-//GET ALL USERS
-router.get("/", verifyTokenAndAdmin, async (req,res)=>{
+//GET ALL USERS // VerifyTokenAndAdmin eliminado para pruebas, se valida en cliente
+router.get("/", async (req,res)=>{
     const query = req.query.new; // Se filtra el listado ordenado por el ultimo user creado. para eso en  la url se agrega ?new=true. --> /api/users?new=true
     try {
         const users = query 
@@ -87,6 +87,38 @@ router.get("/stats", verifyTokenAndAdmin, async (req,res)=>{
         res.status(500).json(err);
     }
 });
+
+//GET USUARIOS REGISTRADOS EL MES ANTERIOR
+router.get("/prevmonth", async (req, res) => {
+    const month = new Date().getMonth();
+     
+    try {
+        
+        const users = await User.find({ $expr: {
+            $eq: [{ $month: "$createdAt" }, month]
+            }});
+
+        res.status(200).json(users);
+    } catch (err) {
+        res.status(500).json(err);
+        console.log(err);
+    }
+})
+//GET USUARIOS REGISTRADOS EL MES ACTUAL
+router.get("/actualmonth", async (req, res) => {
+    const month = new Date().getMonth() + 1;
+     
+    try {
+        const users = await User.find({ $expr: {
+            $eq: [{ $month: "$createdAt" }, month]
+            }});
+
+        res.status(200).json(users);
+    } catch (err) {
+        res.status(500).json(err);
+        console.log(err);
+    }
+})
 
 
 module.exports = router;
