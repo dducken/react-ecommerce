@@ -154,8 +154,8 @@ export default function UsersWidget() {
         <select className="featuredSub" name="mes" id="mes" defaultValue={actualIncome[0]?._id } onChange={(e)=>onChange(e.target.value)}>
           <option value="0" selected disabled>Seleccionar</option>
           <option value="1">Enero</option>
-          <option value="2">Feb</option>
-          <option value="3">Mar</option>
+          <option value="2">Febrero</option>
+          <option value="3">Marzo</option>
           <option value="4">Abril</option>
           <option value="5">Mayo</option>
           <option value="6">Junio</option>
