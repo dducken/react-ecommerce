@@ -1,9 +1,13 @@
 import { Instagram, MailOutline, Phone, Room } from "@material-ui/icons"
 import styledComponents from "styled-components"
+import { mobile } from "../responsive"
 
 
 const Container = styledComponents.div`
     display: flex;
+
+  ${mobile({ flexDirection: "column"})}
+
 `
 const Left = styledComponents.div`
     flex: 1;
@@ -33,6 +37,9 @@ const SocialIcon = styledComponents.h1`
 const Center = styledComponents.div`
     flex: 1;
     padding: 20px;
+
+  ${mobile({ display: "none"})}
+
 `
 const Title = styledComponents.h3`
    margin-bottom: 30px;
@@ -53,6 +60,8 @@ const ListItem = styledComponents.li`
 const Right = styledComponents.div`
     flex: 1;
     padding: 20px;
+
+  ${mobile({ backgroundColor: "#eee"})}
 
     `
 const ContactItem = styledComponents.div`

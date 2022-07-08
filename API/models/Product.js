@@ -7,10 +7,11 @@ const productSchema = new mongoose.Schema(
         img: { type:String, required:true },
         categories: { type:Array },
         width: { type:Number },
-        height: {type:Number},
-        depth: {type:Number},
-        color: { type:String },
+        height: { type:Number },
+        depth: { type:Number },
+        color: { type:Array },
         price: { type:Number, required:true },
+        inStock: {type: Boolean, default: true },
     },
     {timestamps: true}
 );
